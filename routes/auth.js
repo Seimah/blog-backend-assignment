@@ -1,7 +1,12 @@
-const router = require('express').Router()
-const signup = require('../controllers/auth')
+const {Router} =require('express')
+const router = Router()
 
+const {signup, login} = require('../controllers/auth')
 
-router.post('/api/auth/signup')
+// signup route
+router.post('/api/user/new', signup)
 
-module.exports = routes
+// login route
+router.get('/api/user/auth', login)
+
+module.exports = router

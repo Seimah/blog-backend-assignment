@@ -1,25 +1,52 @@
-const User = require("../models/user");
+const User = require("../models/user")
 
-// middleware function
-// async: a function that will take a while to return
-    const signup = async(request, response) => {
-    const {firstName, lastName, email, password} = request.body;
-    const user = User({firstName, lastName, email, password});
+// POST to add user
+const signup = async (req,res) => {
+    const {firstName, lastName, username, password} = req.body
+    const user = User({firstName, lastName, username, password})
+
+    try{
+        const newUser = await user.save()
+
+        res.send({
+            message: 'User Created Successfully', newUser
+        })
+    } catch (exception){
+        res.status(500).send({error: 'Username already exists'})
+    }    
+}
+
+
+//  GET to authenticate user
+const login = async (req, res) => {
+
+    const { username, password } = req.body;
 
     try {
-    const newUser = await user.save()
+      let user = await User.findOne({username});
 
-    response.send({
-        message: 'User created successfully',
-        newUser
-    })
-} catch (exception) {
-    response.status(500).send({error: "Email Already used"})
-}
+      if (!user){
+        return res.status(400).send({
+          message: "User Does Not Exist"
+        });
+        }
+        const isMatch = await (password === user.password)
+  
+      if (!isMatch){
+        return res.status(400).send({
+          message: "Incorrect Password !"
+        });
+        } 
+        res.status(200).send({message: 'Login Successful'})
+    } catch (e) {
+        console.error(e);
+        res.status(500).send({
+        message: "Server Error"
+        });
+    }
 }
 
-authCtrl = {
-    signup = 'value',
-    login = 'value'
+module.exports = {
+    signup,
+    login
 }
-module.exports = authCtrl

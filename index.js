@@ -1,19 +1,28 @@
-const express = require('express')
+const { request, response } = require('express');
+const express = require('express');
 const mongoose = require('mongoose')
+require('dotenv').config()
 
-// routers here
-const authenticationRoutes = require('./routes/auth')
+const app = express();
+const userRoutes = require('./routes/auth')
+const postRoutes = require('./routes/post')
 
-const app = express()
+mongoose.connect(process.env.MONGODB_URL_DEV, {})
+.then(()=>{
+    console.log('mongodb connected')
+})
+.catch((error)=>{
+    console.log(error)
+})
+
 app.use(express.json())
+app.use(userRoutes)
+app.use(postRoutes)
 
+app.listen(process.env.PORT, () => {
+    console.log('Server started on localhost: 8050')
+});
 
-app.get('/', ( request, response ) => {
-    // call back function eg. app.get
-    response.send('<h1>Hey you are here</h1>')
-})
-
-app.listen(8050, () => {
-    console.log('server started on local host 8050')
-})
-
+// app.get('/', (request, response) => {
+//     response.send('<h1>Here Now Now Now bbbb</h1>')
+// });
