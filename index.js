@@ -23,6 +23,3 @@ app.listen(process.env.PORT, () => {
     console.log('Server started on localhost: 8050')
 });
 
-// app.get('/', (request, response) => {
-//     response.send('<h1>Here Now Now Now bbbb</h1>')
-// });

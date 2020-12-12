@@ -2,17 +2,17 @@ const User = require("../models/user")
 
 // POST to add user
 const signup = async (req,res) => {
-    const {firstName, lastName, username, password} = req.body
-    const user = User({firstName, lastName, username, password})
+    const {firstName, lastName, username, confirmPassword, password} = req.body
+    const user = User({firstName, lastName, username, confirmPassword, password})
 
     try{
         const newUser = await user.save()
 
         res.send({
-            message: 'User Created Successfully', newUser
+            message: 'Account Successfully Created', newUser
         })
     } catch (exception){
-        res.status(500).send({error: 'Username already exists'})
+        res.status(500).send({error: 'Account already exists'})
     }    
 }
 
